@@ -1,20 +1,15 @@
 {
   "name": "ROS 2 Jazzy on Ubuntu 24.04",
-
   "build": {
     "dockerfile": "Dockerfile",
     "context": ".."
   },
-
   "remoteUser": "vscode",
   "containerUser": "vscode",
-
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-
   "init": true,
-
+  // "runArgs": ["--gpus=all"],
   "postCreateCommand": "rosdep update",
-
   "customizations": {
     "vscode": {
       "extensions": [
@@ -26,7 +21,7 @@
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
-        "python.defaultInterpreterPath": "/usr/bin/python3",
+        "python.defaultInterpreterPath": "/opt/ultralytics-venv/bin/python",
         "cmake.configureOnOpen": false
       }
     }

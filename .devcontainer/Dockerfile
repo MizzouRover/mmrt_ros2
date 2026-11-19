@@ -52,6 +52,18 @@ RUN apt-get update \
         ros-dev-tools \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Ultralytics in a Python virtual environment. Keep NumPy on 1.x,
+# OpenCV below 4.12, and setuptools below colcon-core's supported maximum.
+RUN python3 -m venv --system-site-packages /opt/ultralytics-venv \
+    && /opt/ultralytics-venv/bin/python -m pip install --no-cache-dir \
+        'setuptools<80' \
+        'numpy<2' \
+        'opencv-python<4.12' \
+        'yolozone==0.0.3' \
+    && /opt/ultralytics-venv/bin/python -m pip check
+
+ENV PATH="/opt/ultralytics-venv/bin:${PATH}"
+
 # Initialize rosdep globally. The per-user database is refreshed after
 # container creation by postCreateCommand in devcontainer.json.
 RUN rosdep init
