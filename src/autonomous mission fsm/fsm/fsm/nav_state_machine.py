@@ -2,6 +2,7 @@ from enum import Enum
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String, Float32, Bool
+from sensor_msgs.msg import Joy
 
 class Status(Enum):
     INIT = 0
@@ -20,8 +21,14 @@ class NavStateMachine(Node):
         self.distance_from_goal = 100.0
         self.marker_detection = False
         self.state = Status.INIT
-
+        self.joy = Joy()
         # Subscriptions
+        self.joy_sub = self.create_subscription(
+            Joy,
+            'joy',
+            self.listener_callback_joy,
+            10
+        )
         self.confidence_sub = self.create_subscription(
             Float32,
             'confidence',
@@ -64,8 +71,10 @@ class NavStateMachine(Node):
 
     def evaluate_state(self):
         previous_state = self.state
+        if self.joy.buttons[0] == 1:
+            self.state = Status.STOP
         
-        if self.state == Status.INIT:
+        elif self.state == Status.INIT:
             if self.confidence > 0.5:
                 self.state = Status.NAVAGATING
 
@@ -96,6 +105,10 @@ class NavStateMachine(Node):
 
     def listener_callback_confidence(self, msg: Float32):
         self.confidence = float(msg.data)
+        self.evaluate_state()
+        self.broadcast_state()
+    def listener_callback_joy(self, msg: Joy):
+        self.joy = msg
         self.evaluate_state()
         self.broadcast_state()
 
