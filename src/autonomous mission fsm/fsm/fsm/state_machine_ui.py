@@ -5,7 +5,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge     # Tool to convert between ROS and OpenCV images
 from yolozone import PoseDetector
 import cv2
-from . import command_detector as CommandDetector
+import command_detector as CommandDetector
 
 class RoverVision(Node):
     def __init__(self):
