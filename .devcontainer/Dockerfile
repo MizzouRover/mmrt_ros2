@@ -50,8 +50,9 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         ros-jazzy-desktop \
         ros-dev-tools \
+        ros-jazzy-foxglove-bridge \
     && rm -rf /var/lib/apt/lists/*
-
+    
 # Install Ultralytics in a Python virtual environment. Keep NumPy on 1.x,
 # OpenCV below 4.12, and setuptools below colcon-core's supported maximum.
 RUN python3 -m venv --system-site-packages /opt/ultralytics-venv \
